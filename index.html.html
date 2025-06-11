@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Eu te amo em todas as línguas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .frase-container {
+      color: white;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 2s ease;
+      position: absolute;
+      max-width: 90vw;
+      padding: 1rem;
+      user-select: none;
+      cursor: default;
+    }
+
+    .frase-original {
+      font-size: 3rem;
+      text-shadow: 0 0 15px white;
+    }
+
+    .frase-traducao {
+      font-size: 1.3rem;
+      margin-top: 10px;
+      color: #ccc;
+      font-style: italic;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="fundo"></canvas>
+<div id="frase" class="frase-container">
+  <div class="frase-original"></div>
+  <div class="frase-traducao"></div>
+</div>
+
+<script>
+const canvas = document.getElementById("fundo");
+const ctx = canvas.getContext("2d");
+let largura = window.innerWidth;
+let altura = window.innerHeight;
+canvas.width = largura;
+canvas.height = altura;
+
+// Estrelas de fundo
+const estrelas = [];
+for (let i = 0; i < 150; i++) {
+  estrelas.push({
+    x: Math.random() * largura,
+    y: Math.random() * altura,
+    r: Math.random() * 1.3 + 0.3,
+    dx: 0.03 + Math.random() * 0.1
+  });
+}
+
+function desenharEstrelas() {
+  ctx.clearRect(0, 0, largura, altura);
+  ctx.fillStyle = "white";
+  estrelas.forEach(e => {
+    ctx.beginPath();
+    ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+    ctx.fill();
+    e.x -= e.dx;
+    if (e.x < 0) {
+      e.x = largura;
+      e.y = Math.random() * altura;
+    }
+  });
+  requestAnimationFrame(desenharEstrelas);
+}
+desenharEstrelas();
+
+const frases = [
+  { original: "Aishiteru", traducao: "Eu te amo", idioma: "Japonês" },
+  { original: "I love you", traducao: "Eu te amo", idioma: "Inglês" },
+  { original: "Je t’aime", traducao: "Eu te amo", idioma: "Francês" },
+  { original: "Te amo", traducao: "Eu te amo", idioma: "Espanhol" },
+  { original: "Ich liebe dich", traducao: "Eu te amo", idioma: "Alemão" },
+  { original: "Ti amo", traducao: "Eu te amo", idioma: "Italiano" },
+  { original: "Я тебя люблю", traducao: "Eu te amo", idioma: "Russo" },
+  { original: "我爱你", traducao: "Eu te amo", idioma: "Chinês" },
+  { original: "사랑해", traducao: "Eu te amo", idioma: "Coreano" },
+  { original: "أنا أحبك", traducao: "Eu te amo", idioma: "Árabe" },
+  { original: "Te iubesc", traducao: "Eu te amo", idioma: "Romeno" },
+  { original: "Nakupenda", traducao: "Eu te amo", idioma: "Suaíli" },
+  { original: "Kocham cię", traducao: "Eu te amo", idioma: "Polonês" },
+  { original: "Jeg elsker dig", traducao: "Eu te amo", idioma: "Dinamarquês" },
+  { original: "S'agapo", traducao: "Eu te amo", idioma: "Grego" },
+  { original: "Volim te", traducao: "Eu te amo", idioma: "Sérvio" },
+  { original: "Mi amas vin", traducao: "Eu te amo", idioma: "Esperanto" },
+  { original: "Mahal kita", traducao: "Eu te amo", idioma: "Filipino" },
+  { original: "T'estimo", traducao: "Eu te amo", idioma: "Catalão" },
+  { original: "Ik hou van jou", traducao: "Eu te amo", idioma: "Holandês" },
+  { original: "Szeretlek", traducao: "Eu te amo", idioma: "Húngaro" },
+  { original: "Te quiero", traducao: "Eu te amo", idioma: "Espanhol (LatAm)" },
+  { original: "Ég elska þig", traducao: "Eu te amo", idioma: "Islandês" },
+  { original: "Aš tave myliu", traducao: "Eu te amo", idioma: "Lituano" },
+  { original: "Seni seviyorum", traducao: "Eu te amo", idioma: "Turco" },
+  { original: "Te dua", traducao: "Eu te amo", idioma: "Albanês" },
+  { original: "Kärlek till dig", traducao: "Eu te amo", idioma: "Sueco" },
+  { original: "Tôi yêu bạn", traducao: "Eu te amo", idioma: "Vietnamita" },
+  { original: "Ek is lief vir jou", traducao: "Eu te amo", idioma: "Africâner" },
+  { original: "Miluji tě", traducao: "Eu te amo", idioma: "Tcheco" },
+  { original: "Ljubim te", traducao: "Eu te amo", idioma: "Bósnio" },
+  { original: "Jag älskar dig", traducao: "Eu te amo", idioma: "Sueco" },
+  { original: "Jeg elsker deg", traducao: "Eu te amo", idioma: "Norueguês" },
+  { original: "Eu te amo", traducao: "Eu te amo", idioma: "Português" }
+];
+
+const fraseEl = document.getElementById("frase");
+const originalEl = fraseEl.querySelector(".frase-original");
+const traducaoEl = fraseEl.querySelector(".frase-traducao");
+
+let indice = 0;
+
+function mostrarFrase() {
+  const f = frases[indice];
+  originalEl.textContent = f.original;
+  traducaoEl.textContent = `— ${f.traducao} (${f.idioma})`;
+
+  fraseEl.style.opacity = 1;
+
+  setTimeout(() => {
+    fraseEl.style.opacity = 0;
+  }, 5000);
+
+  indice++;
+  if (indice >= frases.length) indice = 0;
+}
+
+mostrarFrase();
+setInterval(mostrarFrase, 6000);
+
+window.addEventListener("resize", () => {
+  largura = window.innerWidth;
+  altura = window.innerHeight;
+  canvas.width = largura;
+  canvas.height = altura;
+});
+</script>
+</body>
+</html>
